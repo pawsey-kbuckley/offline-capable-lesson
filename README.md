@@ -19,6 +19,6 @@ for a rendered version of this material, which is, effectively, a
 proof of concept, or rather, a proof of that part of the concept.
 
 Note also that this is merely a more up-to-date, with respect to the
-underlying Crapentries lesson-template than a previous rendering of
+underlying Carpentries lesson-template than a previous rendering of
 the same modifications, vis: <https://vuw-ecs-kevin.github.io/offline-capable-lesson/>
 
