@@ -86,39 +86,53 @@ in the lesson's `_config.yml` file and once in the episode's souce file.
 
 In order to see how these variables can be used, we need to 
 take a look at a section from one of the standard Lesson style's
-template files, in this case `_includes\main_title.html`
+template files, in this case `_includes\episode_navbar.html`
 
 ```{% raw %}
-{% comment %}
-  Main title for lesson pages.
-{% endcomment %}
-<h1 class="maintitle"><a href="{{ page.root }}/">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+...
+  <div class="col-xs-10">
+    {% if include.episode_navbar_title %}
+    <h3 class="maintitle"><a href="{{ relative_root_path }}/">{{ site.title }}</a></h3>
+    {% endif %}
+  </div>
+  <div class="col-xs-1">
+    <h3 class="text-right">
+      {% if page.next.url %}
+      <a href="{{ relative_root_path }}{{ page.next.url }}"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="sr-only">next episode</span></a>
+      {% else %}
+      <a href="{{ relative_root_path }}/"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
+      {% endif %}
+    </h3>
+  </div>
+...
 {% endraw %}```
 
-The first three lines are simply a comment block that gets ignored when
-the file is used to render the Lesson's content, whilst the last line
-contains a mixture of HTML markup, ome strings within pairs of double
-braces - `page.root`, `site.title` and `page.title` - and  a block of
-`if-then-else-endif` logic in which the clauses of the statement are
-contained within blocks denoted by `brace-percent` pairs.
+After placing the `div` and the `h3` into the output stream, we then have
+a mixture of HTML markup, some strings within pairs of double
+braces - `relative_root_path`, `site.title` and `page.next.url` - and  a
+block of `if-then-else-endif` logic in which the clauses of the statements
+are contained within blocks denoted by `brace-percent` pairs.
+
+The first `div h3` block contains the Lesson's title which, when rendered, 
+is a link to the Lesson's home page, whilst the second div block either
+introduces a right arrow graphic, which is a link to the next episode, or
+if there is no next episode, an up arrow, which is a link to the Lesson's
+home page.
 
 If we now allow the rendering of this Lesson to present to us what
 the above template puts into the stream of content it sends to the
-browser we see
+browser
 
 ```
-<h1 class="maintitle"><a href="{{ page.root }}/">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+<div class="col-xs-10">
+<h3 class="maintitle"><a href="../">Offline Capable Lessons</a></h3>
+</div>
+<div class="col-xs-1">
+<a href="../"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
 ```
 
-that the instance of `site.title` with the double brace pair has been
-replaced with the string from the lesson's (think `site`) `_config.yml`
-value for `title`, which the `page.title` with the double brace pair
-has been replaced with the string from this episode's (think `page`) 
-value for `title`.
-
-Note also that the `page.root` for this episode has been replaced by
-the string `../` in the rendered output, even though a `root` variable
-is only defined in `_config.yml` and not this episode's source file.
+we see that the instance of `relative_root_path` for this episode has been replaced by
+the string `../` in the rendered output.
 
 We can now see that double-brace pair variables that are qualified
 with a prepended `site.` refer to variables defined in `_config.yml`,
@@ -133,31 +147,28 @@ the one that this episode's HTMl file resides in, ie the `href="../"`,
 whereas we know that we really want `href="../index.html"`
 
 We might consider the addition of our known default filename into the
-style's template file, `_includes\main_title.html` as follows
+style's template file, `_includes\episode_navbar.html` as follows
 
 ```{% raw %}
-{% comment %}
-  Main title for lesson pages.
-{% endcomment %}
-<h1 class="maintitle"><a href="{{ page.root }}/index.html">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+<a href="{{ relative_root_path }}/index.html"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
 {% endraw %}```
 
 which would then render
 
 ```
-<h1 class="maintitle"><a href="{{ page.root }}/index.html">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+<a href="../index.html"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
 ```
 
-which is what's needed for navigating through ~lesson content that is being
+which is what's needed for navigating through Lesson content that is being
 browsed offline, as well as being a link target that we know will allow us
-to navgiate through lesson content that is being presented by a webserver.
+to navigate through lesson content that is being presented by a webserver.
 
 ### So that's "just" what we need then?
 
 No: not quite.
 
-Firstly, the file `_includes\main_title.html` only handles the link in the
-main title bar, and not the various links in the other places where navigation
+Firstly, the file `_includes\episode_navbar.html` only handles the link in the
+episode title bars, and not the various links in the other places where navigation
 links are presented.
 
 Secondly, the hard-coding of the filename into the template would 
@@ -171,9 +182,9 @@ Secondly, the hard-coding of the filename into the template would
 Let's address that second issue first.
 
 Rather than hard-code the filename into parts of the template, we can
-define a Lesson/site-wide variable, by adding one into the `_config.ywml`
+define a Lesson/site-wide variable, by adding one into the `_config.yml`
 and then refering to it in the template files, so we might now have,
-in `_config.ywml`
+in `_config.yml`
 
 
 ```
@@ -192,24 +203,15 @@ index: "index.html"
 ...
 ```
 
-and in `_includes\main_title.html`,
-
-
-```{% raw %}
-{% comment %}
-  Main title for lesson pages.
-{% endcomment %}
-<h1 class="maintitle"><a href="{{ page.root }}/{{ site.index }}">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
-{% endraw %}```
-
-As modified above, that would render the main title bar as
+and modify `_includes\episode_navbar.html` as shown above,
+then that would render the main title wording and link as
 
 ```
-<h1 class="maintitle"><a href="{{ page.root }}/index.html">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+<h3 class="maintitle"><a href="../index.html">Offline Capable Lessons</a></h3>
 ```
 
 but note what happens if we chose to define the value of `site.index` to
-be empty, by specifying it in `_config.ywml` as follows
+be empty, by specifying it in `_config.yml` as follows
 
 
 ```
@@ -231,7 +233,7 @@ index: ""
 Now our modified template generates the following HTML
 
 ```
-<h1 class="maintitle"><a href="{{ page.root }}/">{{ site.title }}</a>{% if page.title %}: {{ page.title }}{% endif %}</h1>
+<h3 class="maintitle"><a href="../">Offline Capable Lessons</a></h3>
 ```
 
 which, a bare directory path, is exactly what the current template would
@@ -260,24 +262,18 @@ variable.
 The full list of files, along with
 
    - _config.yml
-   - _includes/main_title.html
-
-which we saw edited above, is just
-
-   - _includes/all_keypoints.html
    - _includes/episode_navbar.html
-   - _includes/navbar.html
-   - _includes/syllabus.html
+
+which we saw edited above, is, after the Software Carpentry authors
+took on board the thrust of the previous work
+
+   - NO OTHERS
 
 and the actual changes, (smply inserting `site.index`) just
 
 ```
     _config.yml                    1 change
-    _includes/all_keypoints.html   1 change
-    _includes/episode_navbar.html  5 changes
-    _includes/main_title.html      1 change
-    _includes/navbar.html         10 changes
-    _includes/syllabus.html        2 changes
+    _includes/episode_navbar.html  3 changes
 ```
 and of course, once those changes were in the official style's template
 files, no-one would need to make that set of changes ever again.

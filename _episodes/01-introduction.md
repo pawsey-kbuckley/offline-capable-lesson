@@ -30,7 +30,7 @@ that the rendering of a fully offline capable lesson would solve.
 
 One of the plus points about the Software Carpentry's lesson content,
 as produced with the current rendering approach, is that everything
-needed to use the lesson is contained within `_site` directory.
+needed to use the lesson is contained within the `_site` directory.
 
 One could imagine that lessons might even be distributed, within
 teaching arenas where connectivity is not guaranteed, simply by
@@ -40,12 +40,12 @@ passing around some media that merely contained the `_site` directory.
 
 ### The Lesson's home page
 
-The first impression, of the rendering of a lesson's content following a
+The first impression, of the rendering of a Lesson's content following a
 `make site`, when viewed via a `file:///` URI, probably doesn't give much
-cause for concern, however attempting to access pages via links within the 
-menus and footer bars, and to the individual episodes themselves linked
-to from with the Schedule, doesn't provide as seamless an experience as
-one might wish for. 
+cause for concern, and indeed, since the first version of this lesson was 
+created, some of its ideas have been taken on board by the Carpentries,
+however, as we'll see, the current styles still don't provide as seamless
+an experience as one might wish for. 
 
 <img style="border:2px solid black" src="{{ page.root }}/fig/foc-browse_home_file_uri.png" alt="Home Page as file URI" />
 
@@ -53,38 +53,42 @@ Let's see what happens when we click on the link to Episode 1, Introduction.
 
 ### The target of the Episode 1 links, as currently rendered 
 
-Oh dear!
-
-Rather than presenting us with Episode's page, the link underneath
-the Schedule's content merely takes us to a directory index of the 
-directory that the file containing the Episode's actual content is
-stored within,
-
-<img style="border:2px solid black" src="{{ page.root }}/fig/foc-click_lesson1_link.png" alt="Lesson1 link destination" />
-
-and indeed, an inspection of the URI in the address field does show
-a bare directory path, so, in all fairness to the browser, it has
-actually presented to us what we *requested*, even if what we actually
-*wanted* was the Episode's actual content, as contained in the `index.html`
-file that we can see.
-
-Let's  see what happens when we click on the link to `index.html`
-
-### The target of the Episode 1 directory's index.html link, as currently rendered 
-
-Admittedly, it has taken us two clicks to get here, but we do now
-have the Episode's actual content presented to us, however, there
-are clearly a couple of places where things don't look quite right.
+Yes, the plural "links" in this section's title is correct.
+As well as the link in the Schedule, there's also one in the Episodes menu.
 
 <img style="border:2px solid black" src="{{ page.root }}/fig/foc-browse_lesson1_index_file.png" alt="Lesson1 Page as file URI" />
 
-Typically, we'd expect to see navigation arrows in the four corners of 
-page, and thematic highlighter images in the `Overview` and `Key Points`
-areas' title bars but the images are missing.
+Compared to the older revisions of styles, this is much better,
+we are presented with the content of the Episode page, and the
+images representing the navigation buttons are displayed.
 
-Furthermore, clicking on links within the Episode will only ever take
-us back to a directory index of the directory containing the file,
-`index.html`, that we actually *wanted* to be presented to us.
+But what happens when we click on one of those, so as to return
+to the Lesson's home page?
+
+### The target of the link under the Episode 1 page's up-arrow image, as currently rendered 
+
+<img style="border:2px solid black" src="{{ page.root }}/fig/foc-click_lesson1_link.png" alt="Lesson1 link destination" />
+
+Oh dear!
+
+Rather than presenting us with Lesson's home page, the link underneath
+the Episode's up-arrow image merely takes us to a directory index of the 
+top-level directory for the Lesson and shows us a file listing for it?
+
+An inspection of the URI in the address field does show
+a bare directory path, so, in all fairness to the browser, it has
+actually presented to us what we *requested*, even if what we actually
+*wanted* was the Lesson's home-page's actual content, as contained in 
+the `index.html` file that we can see.
+
+Let's  see what happens when we click on the link to `index.html`
+
+### The target of the Lesson's directory's index.html link, as currently rendered 
+
+<img style="border:2px solid black" src="{{ page.root }}/fig/foc-browse_home_file_uri.png" alt="Home Page as file URI" />
+
+Admittedly, it has taken us two clicks to get here, but we do now
+have the Lesson's home-page's actual content presented to us.
 
 ### So what's going on? Isn't this the same content that GitHub's gh-pages branch uses?
  
@@ -109,39 +113,16 @@ as far as the directory containing the file containing the actual content.
 
 Perhaps the ideal example to use to highlight what happens with Software
 Carpentry Lesson content as presented by a webserver would be to use a
-browser to view the rendered contents of Greg Wilson's `lesson-example`
-repository, as presented by the webserver at `github.io`
+browser to view the rendered contents of the previous version of this 
+`lesson-example` repository, as presented by the webserver at `github.io`
 
-[https://gvwilson.github.io/lesson-example/](https://gvwilson.github.io/lesson-example/)
-
-and then navigate to an Episode within that Lesson, say Episode 2,
-
-[https://gvwilson.github.io/lesson-example/02-tooling/](https://gvwilson.github.io/lesson-example/02-tooling/)
+[https://vuw-ecs-kevin.github.io/offline-capable-lesson/]([https://vuw-ecs-kevin.github.io/offline-capable-lesson/)
 
 What we may find surprising, given that we know that Software Carpentry
-Lesson content is actually stored in files named `index.html`, is that the
-URIs we see in our browser's address bar are merely paths to directories,
-not to the files themselves, and yet we are not getting the directory
+home page content is actually stored in a file named `index.html`, is that the
+URIs we see in our browser's address bar is merely the path to the directory,
+not to the file itself, and yet we are not getting the directory content
 index that our file-based browsing of the same content produced.
-
-The answer lies in  the fact that directories can contain more than
-one file, and may even contain other subdirectories, and so whilst
-we only saw one file `index.html` in the directory listing of our
-Lessons's `_site/01-introduction` directory, had we clicked back 
-through to the Lesson's home page, we would have been presented
-with the directory index of the `_site` directory itself.
-
-If we do that from within the shell, we see a number of files and
-sub-directories, alongside what we know to be the file that contains
-the actual home page content.
-
-```
-$ ls _site/
-01-introduction/  about/    discuss/         fig/        license/
-AUTHORS           aio/      favicon-dc.ico   figures/    reference/
-CITATION          assets/   favicon-lc.ico   guide/      setup/
-CONTRIBUTING.md   conduct/  favicon-swc.ico  index.html
-```
 
 Clearly then, our file-based browsing of a directory has no way to
 make a choice of what to display, and so displays an index of all
@@ -193,15 +174,11 @@ the webserver is automatically presenting the content from a default
 filename `index.html`, as though it had been appended onto our URI.
 
 In other words, what we are actually being presented with, when we view
-Greg's rendered content at `github.io`, are the files
+the previosus work's rendered content at `github.io`, are the files
 
-[https://gvwilson.github.io/lesson-example/index.html](https://gvwilson.github.io/lesson-example/index.html)
+[https://vuw-ecs-kevin.github.io/offline-capable-lesson/index.html]([https://vuw-ecs-kevin.github.io/offline-capable-lesson/index.html)
 
-and
-
-[https://gvwilson.github.io/lesson-example/02-tooling/index.html](https://gvwilson.github.io/lesson-example/02-tooling/index.html)
-
-and not the directory indexes, despite the fact that our requests to the
+and not the directory index, despite the fact that our requests to the
 webserver don't explcityly contain the file names.
 
 ## So the answer to `file:///` navigation problems is: just append `index.html` ?

@@ -27,7 +27,7 @@ as part of the lesson."
 
 The previous  episode took us almost as far as we can get towards
 producing a "Fully Offline Capble" rendering of a Lesson's content,
-however there are still one or two places with the current Lesson
+however there are still one or two places within the current Lesson
 styles template, where navigation breaks when the Lesson is being 
 viewed offline, even though the content that those navigational
 links would take the reader to, are available for rendering within
@@ -35,120 +35,130 @@ the Lesson itself.
 
 ## How many navigational links remain broken, when viewed offline ?
 
-In the previous episode we saw how to modify all of a rendered
-lesson's "raw directory path" links, so that they can contain a
-deafult filename target, if required.
+In the previous episode we saw how to modify links rendered as a
+"raw directory path" in a lesson's upper navigation bar, so that
+they can contain a default filename target, if required.
 
 If we now take a look at all of the navigational links within a
-rendered Lesson's HTML, we see the following set of targets
+rendered Lesson's HTML, we will observe the following set of 
+targets that don't "look right"
 
 ### Main title bar
 
-The navigational links in the main title bar, and their targets, are:
+Navigational links in the main title bar, and their targets:
 
-* Home
-    * top_level/_site/
-* Code of Conduct
-    * top_level/conduct/_site/
-* Setup
-    * top_level/setup/_site/
-* Episode sub-menu items
-    * top_level/_site/00-episode-dir/
-* Extras sub-menu items
-    * top_level/_site/reference/
-    * top_level/_site/about/
-    * top_level/_site/discuss/
-    * top_level/_site/figures/
-    * top_level/_site/guide/
-* Licence
-    * top_level/_site/license/
 * Improve this page
-    * RemoteRepoURI/edit/path
+    * `file:///edit//_episodes/01-introduction.md`
 
 so, for all of those, bar the direct link to the Lesson's repository
-within GitHub itself, our previous modifications allow for a working
-offline navigation of a rendered Lesson, whilst the link to the 
-Lesson's remote repository should not be expected to take an offline
-reader anywhere within the Lesson anyway.
-
-Nothing needed here.
-
-### Up, Prev and Next Episode, and Lesson Title, Links 
-
-These are the link targets underneath the navigational arrows to the
-relavent previous or next Episode, or up to the home page in the case
-of the first Episode's "previous" target, and underneath the Lesson
-title that appears above the Episode title and so will be either
-
-* The Prev or Next Episode
-    * top_level/_site/00-episode-dir/
-* The home page
-    * top_level/_site/
-
-and again, our previous modifications allow for a working offline
-navigation to those targets.
-
-So again, nothing needed here.
+within GitHub itself, our previous modifications, now applied by the
+Carpentries to the style template, allow for a working offline navigation
+of a rendered Lesson, whilst the link to the Lesson's remote repository
+should not be expected to take an offline reader anywhere within the
+Lesson anyway, however, the fact that the link contains a `file:///` URI
+does suggest that it could be pointing to something local to the lesson.
 
 ### Footer Menus
 
-The are two seperate parts in the footer, on the left-hand side,
+The are three seperate parts in the footer, on the left-hand side,
 
-* Copyright (Software Carpentry Foundation) link
+* Licensed under CC-BY 4.0 
+    * https://creativecommons.org/licenses/by/4.0/
+
+and then the two Carpentry links,
+
+* by The Carpentries link
+    * https://carpentries.org/
+
+* by Software Carpentry Foundation link
     * https://software-carpentry.org/
 
-which is clearly a link to remote website, whilst, on the right-hand side,
+all three of which are clearly links to remote websites, then, centered
+and underneath the left and right-hand sides,
+
+* Using The Carpentries style
+    * https://github.com/carpentries/styles/
+* version M.N.P
+    * https://github.com/carpentries/styles/releases/tag/vM.M.P
+
+which, again, are clearly links to remote websites, and then, the right-hand
+side link list,
 
 * Edit on GitHub
-    * RemoteRepoURI/edit/path
+    * `file:///edit//_episodes/01-introduction.md`
 * Contributing
-    * RemoteRepoURI/blob/gh-pages/CONTRIBUTING.md
+    * `file:///blob/CONTRIBUTING.md`
 * Source
-    * RemoteRepoURI/
+    * `file:///`
 * Cite
-    * RemoteRepoURI/eblob/gh-pages/CITATION
+    * `file:///blob/CITATION`
 * Contact
-    * mailto:address
+    * mailto:address@somedomain.tld
 
 where the "Edit on GitHub" link, duplicating, as it does, the "Improve
 this page" link from the main menu bar; the link to the remote source
 repository, and the contact email address should all be expected to be
 remote.
 
+Clearly though, those links are not remote: so what's happening here?
+
+The answer lies in yet another template file, this time `_includes/lesson_footer.html`
+where we see that the source for the links is constructed from a template
+that contains the site variable `repo_url`, for example.
+
+```
+{% raw %}
+<a href="{{ repo_url }}/blob/{{ source_branch }}/CONTRIBUTING.md" data-checker-ignore>Contributing</a>
+{%endraw %}
+```
+
+Knowing that, we can see that, because we have rendered this lesson
+offline, our `repo_url` variable gets replaced by `file:///` which
+the reader may find a little confusing.
+
+We will return to this issue later.
+
 However, in the case of the "Contributing" and "Cite" link targets,
-do they need to point back to files in the remote repository?
+the question is not one of needing to find a way to point to a remote
+resource but one of, "do they really need to point back to files in
+the remote repository"?
+
+If we take another look at the directory listing that the broken behvaiour
+of the current template exposed to us in Episode one, we can even see that
+three files `AUTHORS`, `CITATION` and `CONTRIBUTING.md` are even copied 
+into the `_site` directory for us.
 
 Considering that within a locally checked-out copy of a Lesson's repository,
 we already have a copy of the `CONTRIBUTING.md` file and a copy of the plain
-text `CITATION` files that the links are targetting, is there any reason that
-we cannot use our checked-out copies of those files to render their content
-into the Lesson?
+text `CITATION` files, both containing content that the links are targetting,
+is there any reason that we cannot use our checked-out copies of those files
+to render their content into the Lesson?
 
 In the case of `CONTRIBUTING.md`, the answer is clearly, "No", after all,
 we already use the following Markdown files to create local-to-the-lesson
 content, 
 
 * CONDUCT.md
-    * top_level/conduct/_site/
+    * top_level//_site/Code_of_Conduct.html
 * LICENSE.md
-    * top_level/_site/license/
+    * top_level/_site/LICENSE.html
 * reference.md
-    * top_level/_site/reference/
+    * top_level/_site/reference.html
 * setup.md
-    * top_level/setup/_site/
+    * top_level/_site/setup.html
 
 so why not operate on `CONTRIBUTING.md` in the same manner, so as to have it
 appear at
 
 * Contributing
-    * top_level/_site/contributing/
+    * top_level/_site/contributing.html
 
 Similary, in the case of the plain text `CITATION` file, if that were
 turned into a Markdown file, so `CITATION.md`, it could be rendered
 so as to appear as
 
 * Cite
-    * top_level/_site/citation/
+    * top_level/_site/citation.html
 
 It might even be possible to make a case for the contents of the,
 as currently maintained, plain text `AUTHORS` file to be treated
@@ -159,19 +169,31 @@ for now.
 
 ## Rendering existing, but unused, local copy content into the Lesson
 
-If we use the `setup.md` file as an example of how such a file gets
-rendered into the Lesson we see this stanza at the top of the file
+If we use the `CODE_OF_CONDUCT.md` file as an example of how such a file
+gets rendered into the Lesson we see this stanza at the top of the file
 
 ```
-$ head -5 setup.md
+$ head -5 CODE_OF_CONDUCT.md
 ---{% raw %}
+---
 layout: page
-title: Setup
-permalink: /setup/
+title: "Contributor Code of Conduct"
+---
+As contributors and maintainers of this project,
+...
 {%endraw %}---
 ```
 
 after which comes the content for the Setup page itself.
+
+Similarly in the template `_includes/navbar.html` we see how
+the source translates our local files into links:
+
+```
+{% raw %}
+<a href="{{ relative_root_path }}{% link CODE_OF_CONDUCT.md %}">Code of Conduct</a>
+{%endraw %}
+```
 
 It should thus be a simple case of adding the following stanza
 
@@ -179,14 +201,20 @@ It should thus be a simple case of adding the following stanza
 ---{% raw %}
 layout: page
 title: Contributing
-permalink: /contributing/
 {%endraw %}---
 ```
 
 to the top of the exiting `CONTRIBUTING.md` file, for it to
 become available, within the Lesson, as
 
-* top_level/_site/contributing/
+* top_level/_site/CONTRIBUTING.html
+
+once we have edited the  `_includes/lesson-footer.html` to have the
+following instead of the code to link to the external repo:
+
+{% raw %}
+<a href="{{ relative_root_path }}{% link CONTRIBUTING.md %}">Contributing</a>
+{%endraw %}
 
 Similarly, if simply replace the plain text file `CITATION` with
 a `CITATION.md` file that has the following stanza at the top
@@ -195,13 +223,12 @@ a `CITATION.md` file that has the following stanza at the top
 ---{% raw %}
 layout: page
 title: How to cite this lesson
-permalink: /citation/
 {%endraw %}---
 ```
 
 then we would have the content of that file available, within the Lesson, as
 
-* top_level/_site/citation/
+* top_level/_site/CITATION.html
 
 Once those link targets become available, we can simply alter this file
 

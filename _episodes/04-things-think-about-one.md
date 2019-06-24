@@ -113,25 +113,48 @@ so as to allow for offline navigation within a Lessons, if a Lesson's authors
 decide not to populate a variable to hold the URL of the repository, then 
 the rendered content will remain the same.
 
-If we have defined a variable `static_repo_url` then we just need 
-to edit two files in the current Lesson styles template
+If we have defined two site variables `static_repo_url` and `static_def_bramch`
+then we just need  to edit two files in the current Lesson styles template
 
-- _includes/lesson_footer.html
-- _includes/navbar.html
+- `_includes/lesson_footer.html`
+- `_includes/navbar.html`
 
 so that references to `site.github.repository_url` get wrapped in an
 if-then-else clause similar to this one, from `_includes/lesson_footer.html`
 
-```{% raw %}
+```
+{% raw %}---
     {% if site.github.repository_url %}
     <a href="{{ site.github.repository_url }}/">Source</a>
     {% else %}
     <a href="{{ site.static_repo_url }}/">Source</a>
     {% endif %}
-{% endraw %}```
+---{%endraw %}
+```
 
 Note that this modification also fixes up the targets of the external links
 when the lesson is viewed using Jekyll's own webserver, during a `make serve`.
+
+Whilst there is a suggestion, in the current styles' `_config.yml` that says
+
+```
+{%raw%}
+# Magic to make URLs resolve both locally and on GitHub.
+# See https://help.github.com/articles/repository-metadata-on-github-pages/.
+# Please don't change it: <USERNAME>/<PROJECT> is correct.
+repository: <USERNAME>/<PROJECT>
+{%endraw %}
+```
+
+be aware that there is no such thing as magic, well, not here anyway!
+
+When the site is being viewed locally, via a `make serve` then the URIs of
+the "Edit on GitHub" and "Source" links are merely as follows
+
+- http://127.0.0.1:4000/edit//_episodes/04-things-think-about-one.md
+- http://127.0.0.1:4000
+
+as so don't point to the external repository.
 
 {% include links.md %}
 
