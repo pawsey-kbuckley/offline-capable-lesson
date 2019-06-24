@@ -19,6 +19,12 @@ life_cycle: "stable"
 # Filename matching webserver default, for offline browsing
 index: "index.html"
 
+# Static variables for this lesson for use when repository metadats
+#  is not available. See entry in Generic settings below.
+# Replace FIX_USERNAME, FIX_PROJECT and FIX_DEF_BRANCH with real data
+static_repo_url: "https://github.com/FIX_USERNAME/FIX_PROJECT"
+static_def_branch: "FIX_DEF_BRANCH"
+
 #------------------------------------------------------------
 # Generic settings (should not need to change).
 #------------------------------------------------------------

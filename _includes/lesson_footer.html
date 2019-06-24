@@ -33,12 +33,20 @@
 	<a href="{{repo_url}}/edit/{{ default_branch }}/{{page.path|replace: "_episodes", "_episodes_rmd" | replace: ".md", ".Rmd"}}" data-checker-ignore>Edit on GitHub</a>
 	{% endif %}
 	{% else %}
+	{% if site.github.repository_url %}
 	<a href="{{repo_url}}/edit/{{ default_branch }}/{{page.path}}" data-checker-ignore>Edit on GitHub</a>
+	{% else %}
+	<a href="{{ site.static_repo_url }}/edit/{{ site.static_def_branch }}/{{page.path}}" data-checker-ignore>Edit on GitHub</a>
+	{% endif %}
 	{% endif %}
 	/
 	<a href="{{ relative_root_path }}{% link CONTRIBUTING.md %}">Contributing</a>
 	/
+	{% if site.github.repository_url %}
 	<a href="{{ repo_url }}/">Source</a>
+	{% else %}
+	<a href="{{ site.static_repo_url }}/">Source</a>
+	{% endif %}
 	/
 	<a href="{{ relative_root_path }}{% link CITATION.md %}">Cite</a>
 	/
