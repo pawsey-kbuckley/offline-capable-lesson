@@ -16,6 +16,9 @@ title: "Offline Capable Lessons"
 # possible values: "pre-alpha", "alpha", "beta", "stable"
 life_cycle: "stable"
 
+# Filename matching webserver default, for offline browsing
+index: "index.html"
+
 #------------------------------------------------------------
 # Generic settings (should not need to change).
 #------------------------------------------------------------
