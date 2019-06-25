@@ -25,6 +25,9 @@ This lesson is therefore "Alpha" in that the change history from the
 previous project lesson need to be applied to a more up-to-date Software
 Carpentry base.
 
+It should also be noted that some of the suggestions from that previous
+work have since been incorperated into the Carpentry base lesson: but not all!
+
 > ## Prerequisites
 >
 > This material assumes readers will have become familiar with the
