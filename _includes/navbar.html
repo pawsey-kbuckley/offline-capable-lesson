@@ -7,7 +7,31 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      {% comment %} Select what logo to display. {% endcomment %}
+      <a href="{{ site.vuw_site }}" class="pull-left">
+        <img class="navbar-logo-2" src="{{ page.root }}/assets/img/Our_Logo.png" alt="FIXME_OUR logo" />
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+      <div class="navbar-form navbar-right">
+        <div class="form-group">
+          Pawsey Supercomputing Centre<br/>Perth, Western Australia
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} Above is the ECS nav bar, below the original {% endcomment %}
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -17,19 +41,19 @@
       {% comment %} Select what logo to display. {% endcomment %}
       {% if site.carpentry == "swc" %}
       <a href="{{ site.swc_site }}" class="pull-left">
-        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/swc-icon-blue.svg %}" alt="Software Carpentry logo" />
+        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/swc-icon-transp.svg %}" alt="Software Carpentry logo" />
       </a>
       {% elsif site.carpentry == "dc" %}
       <a href="{{ site.dc_site }}" class="pull-left">
-        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/dc-icon-black.svg %}" alt="Data Carpentry logo" />
+        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/dc-icon-transp.svg %}" alt="Data Carpentry logo" />
       </a>
       {% elsif site.carpentry == "lc" %}
       <a href="{{ site.lc_site }}" class="pull-left">
-        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/lc-icon-black.svg %}" alt="Library Carpentry logo" />
+        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/lc-icon-transp.svg %}" alt="Library Carpentry logo" />
       </a>
       {% elsif site.carpentry == "cp" %}
       <a href="{{ site.carpentries_site }}" class="pull-left">
-        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/cp-logo-blue.svg %}" alt="The Carpentries logo" />
+        <img class="navbar-logo" src="{{ relative_root_path }}{% link /assets/img/cp-logo-transp.svg %}" alt="The Carpentries logo" />
       </a>
       {% endif %}
 

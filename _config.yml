@@ -16,6 +16,9 @@ title: "Offline Capable Lessons"
 # possible values: "pre-alpha", "alpha", "beta", "stable"
 life_cycle: "stable"
 
+# URI that goes under the institution's log
+site_logo_site: "https://FIXME.your-inst.tld"
+
 #------------------------------------------------------------
 # Generic settings (should not need to change).
 #------------------------------------------------------------
