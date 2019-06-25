@@ -25,6 +25,9 @@ index: "index.html"
 static_repo_url: "https://github.com/FIX_USERNAME/FIX_PROJECT"
 static_def_branch: "FIX_DEF_BRANCH"
 
+# URI that goes under the institution's log
+site_logo_site: "https://FIXME.your-inst.tld"
+
 #------------------------------------------------------------
 # Generic settings (should not need to change).
 #------------------------------------------------------------
